@@ -28,3 +28,31 @@ exports.buildStyles = buildStyles;
 exports.default = async function() {
     gulp.watch(`./${APP}/scss/**/*.scss`, gulp.series(buildStyles));
 };
+
+const { src, dest, parallel } = require('gulp');
+
+function copyIndexScss() {
+    return gulp.src('dist/scss/index.scss')
+        .pipe(dest('build/styles/'));
+}
+
+
+exports.default = async function() {
+    gulp.watch(`dist/scss/index.scss`);
+};
+
+function copyScss() {
+    return gulp.src(['dist/scss/**/*.scss', '!dist/scss/components/**'])
+        .pipe(dest('build/styles/'));
+}
+
+
+exports.copy = parallel(copyIndexScss, copyScss);
+
+function sassCompile(done) {
+    console.log('Compile SASS to CSS');
+    console.log('Compile Pug to HTML');
+
+    done();
+}
+exports.layoutCompile = sassCompile;
