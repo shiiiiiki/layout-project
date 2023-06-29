@@ -56,3 +56,24 @@ function sassCompile(done) {
     done();
 }
 exports.layoutCompile = sassCompile;
+
+const { watch } = require('gulp');
+const {series} = require("gulp-cli/lib/shared/cli-options");
+
+const changeAppStylesFile = (done) => {
+    console.log('Файл index.scss изменился');
+    done();
+};
+
+const checkFileStructure = (done) => {
+    console.log('Изменилась структура файлов');
+    done();
+};
+
+const watchers = () => {
+    watch('dist/scss/index.scss', { events: 'change' }, changeAppStylesFile);
+    watch('dist/scss/components/', { events: ['add', 'unlink'] }, checkFileStructure);
+};
+
+exports.watchers = watchers;
+exports.checkScss = series(copyIndexScss, copyScss, watchers);
